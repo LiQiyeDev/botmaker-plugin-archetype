@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+
+    <name>${pluginName}</name>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <!-- BotMaker's modules are published through JitPack, which serves each git tag as
+             com.github.LiQiyeDev:<repo>:<tag>. -->
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!--
+          THE CONTRACT — what this plugin implements. `provided`, and the scope is not negotiable: Studio
+          already has these classes, and they must be the SAME Class objects on both sides of the plugin
+          boundary. Shipping a second copy inside your jar is the one mistake that produces a
+          ClassCastException between two classes with identical names.
+        -->
+        <dependency>
+            <groupId>com.github.LiQiyeDev</groupId>
+            <artifactId>botmaker-studio-api</artifactId>
+            <version>${studioApiVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--
+          THE WIDGETS — what this plugin compiles against. Ordinary `compile` scope, and that too is
+          deliberate: the toolkit is resolved onto YOUR plugin's classloader, so your version is yours and no
+          other plugin's. Do not mark it `provided`; Studio does not have it.
+        -->
+        <dependency>
+            <groupId>com.github.LiQiyeDev</groupId>
+            <artifactId>botmaker-plugin-toolkit</artifactId>
+            <version>${toolkitVersion}</version>
+        </dependency>
+
+        <!--
+          JavaFX, `provided` for the same reason as the contract: a slot editor draws into the host's scene
+          graph, and a second toolkit in a process that already has one does not work.
+        -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+      groupId is com.github.LiQiyeDev for the same reason as every other published module: JitPack serves
+      this repo as com.github.LiQiyeDev:botmaker-plugin-archetype:<tag> whatever this pom says. The version
+      is cosmetic.
+    -->
+    <groupId>com.github.LiQiyeDev</groupId>
+    <artifactId>botmaker-plugin-archetype</artifactId>
+    <version>0.0.0-SNAPSHOT</version>
+    <packaging>maven-archetype</packaging>
+
+    <name>BotMaker Plugin Archetype</name>
+    <description>
+        mvn archetype:generate for a BotMaker Studio plugin: a pom with the right three scopes, the
+        META-INF/services declaration, a StudioPlugin with one working slot editor and one registered value
+        type, and a test that runs with no host and no JavaFX thread.
+    </description>
+
+    <!--
+      THIS MODULE HAS NO BOTMAKER DEPENDENCY, and that is the whole reason it needs neither
+      flatten-maven-plugin nor a .deps.env. What it ships is TEXT: the versions it writes into a generated
+      pom are archetype requiredProperties with defaults, substituted at generation time, not Maven
+      dependencies resolved at build time. Nothing here is on anybody's classpath.
+
+      The defaults are `main-SNAPSHOT` — a real JitPack coordinate that never goes stale — rather than a
+      released tag baked in by release.sh. A baked tag would make every archetype release owe an edit here,
+      and would age badly the moment the contract moved without the archetype moving; `main-SNAPSHOT` is
+      wrong in the other direction (a plugin author tracking an unreleased contract) and says so in the
+      generated README, where an author can act on it.
+    -->
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <extensions>
+            <!-- What makes <packaging>maven-archetype</packaging> a lifecycle Maven understands. -->
+            <extension>
+                <groupId>org.apache.maven.archetype</groupId>
+                <artifactId>archetype-packaging</artifactId>
+                <version>3.2.1</version>
+            </extension>
+        </extensions>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-archetype-plugin</artifactId>
+                    <version>3.2.1</version>
+                    <configuration>
+                        <!--
+                          The integration test in src/test/resources/projects GENERATES the skeleton and
+                          stops there; it does not build it. Building it would resolve
+                          botmaker-studio-api and botmaker-plugin-toolkit at whatever `main-SNAPSHOT`
+                          currently is, which would put a network fetch — and somebody else's green
+                          branch — inside `mvn install` at the umbrella root. That is the one thing this
+                          repository's standing constraint forbids.
+
+                          What the IT does hold is worth having on its own: the archetype descriptor is
+                          well-formed, every filtered file's Velocity references resolve, and the packaged
+                          directories land under the requested package.
+                        -->
+                        <noLog>true</noLog>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

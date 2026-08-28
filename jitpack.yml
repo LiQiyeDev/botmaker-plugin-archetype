@@ -1,0 +1,8 @@
+jdk:
+  - openjdk21
+install:
+  # No -D and no .deps.env, unlike every other plugin-facing module here: this one has NO BotMaker
+  # dependency. What it ships is text, and the BotMaker versions it writes into a generated pom are
+  # archetype requiredProperties substituted at generation time. There is nothing for flatten to bake and
+  # nothing to pin.
+  - mvn install -DskipTests -Dmaven.javadoc.skip=true -B

@@ -17,6 +17,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
   `@Hidden`), `ExamplePlugin` (a palette, one registered `ValueType` with a codec, one slot editor chosen by
   the *call*) and `ExamplePluginTest` (seven tests, including the contexts the editor must **decline** —
   the half a plugin author never tests by hand).
+- **The skeleton's codec writes its literal with `Source.string`** (2026-08-28), where it used to carry a
+  private `quote(…)` escaping the backslash and the quote and nothing else. The example a beginner copies is
+  the one they will copy into a real plugin, and a hand-rolled escaper is exactly the mistake the toolkit
+  now owns: a pasted tab in a value becomes a compile error in somebody's bot.
 - **Four required properties, each with a working default** — `pluginId`, `pluginName`, `studioApiVersion`,
   `toolkitVersion`. An archetype that stops to ask a question a beginner cannot answer is worse than one
   that guesses: a guess is visible in the generated files and can be edited.

@@ -8,6 +8,7 @@ import com.botmaker.plugin.toolkit.AbstractStudioPlugin;
 import com.botmaker.plugin.toolkit.CallSites;
 import com.botmaker.plugin.toolkit.Codecs;
 import com.botmaker.plugin.toolkit.Editors;
+import com.botmaker.plugin.toolkit.Source;
 
 import java.util.List;
 
@@ -71,12 +72,17 @@ public final class ExamplePlugin extends AbstractStudioPlugin {
      * exist. {@code Codecs.or} is what makes a partial parser total: a reader of a stored value must degrade
      * rather than throw, because a value the user typed can be anything and an editor that throws while
      * building leaves a row of the Parameters window empty.
+     *
+     * <p>The third function is the <b>Java literal</b> the generated bot will compile, so it goes through
+     * {@code Source} rather than through string concatenation of your own: a value can contain a quote, a
+     * backslash or a pasted newline, and each of those hand-escaped wrongly is a compile error in somebody
+     * else's bot.
      */
     @Override
     protected ValueCatalog buildValueTypes() {
         return ValueCatalog.builder()
                 .add(GREETING, Codecs.or(
-                        Codecs.of(wire -> wire, stored -> stored, ExamplePlugin::quote), ""))
+                        Codecs.of(wire -> wire, stored -> stored, Source::string), ""))
                 .build();
     }
 
@@ -96,10 +102,5 @@ public final class ExamplePlugin extends AbstractStudioPlugin {
         return List.of(SlotEditor.of(
                 CallSites.firstArgumentOf(ExampleApi.class, "greet"),
                 ctx -> Editors.text(ctx, "Who to greet")));
-    }
-
-    /** A Java string literal for the given text. */
-    private static String quote(String text) {
-        return "\"" + text.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
     }
 }

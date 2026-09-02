@@ -1,5 +1,5 @@
 jdk:
-  - openjdk21
+  - openjdk25
 install:
   # No -D and no .deps.env, unlike every other plugin-facing module here: this one has NO BotMaker
   # dependency. What it ships is text, and the BotMaker versions it writes into a generated pom are

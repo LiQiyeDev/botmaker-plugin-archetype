@@ -5,6 +5,14 @@ All notable changes to `botmaker-plugin-archetype`.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this module uses
 [semantic versioning](https://semver.org/). `release.sh` refuses to cut a version with no section here.
 
+## [Unreleased]
+
+### Changed
+
+- **The generated skeleton targets Java 25 and JavaFX 25.0.4.** Its pom says `maven.compiler.release` rather
+  than `source`/`target`, so a plugin author on a newer JDK compiles against 25's platform API rather than
+  their own JDK's. A generated project needs a JDK 25 or newer.
+
 ## [0.0.1] — 2026-09-02
 
 First release. `0.x` to match the platform the skeleton is generated against; the archetype itself pins

@@ -5,6 +5,14 @@ reasoning.
 
 ## Done
 
+### 2026-09-02 — JDK 25 LTS, in the module's own pom *and* in the one it writes
+
+Two poms, and the second is the one that matters: `archetype-resources/pom.xml` now says
+`maven.compiler.release` 25 and pins `javafx-controls` at 25.0.4, so a plugin generated after this compiles
+against 25's platform API rather than against whatever JDK its author happens to run. A generated project
+therefore needs a JDK 25 or newer. `jitpack.yml` → `openjdk25` and CI → `java-version: '25'` alongside. The
+full account is in `../botmaker-studio-api/ROADMAP.md`, dated the same day.
+
 ### 2026-08-28 — the module exists, and the skeleton is checked by building it
 
 Plugin-ecosystem plan, phase 6. The deliverable is a project that comes out of
